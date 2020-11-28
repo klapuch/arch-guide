@@ -46,7 +46,7 @@ ___
 - `mount /dev/mapper/cryptboot /mnt/boot`
 
 ##### Configuration
-- `pacstrap /mnt base linux-lts linux-firmware vim dhcpd net-tools base-devel lvm2 mkinitcpio grub efibootmgr intel-ucode`
+- `pacstrap /mnt base linux-lts linux-firmware vim dhcp dhcpcd iwd net-tools base-devel lvm2 mkinitcpio grub efibootmgr intel-ucode`
 - edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)`
 - get UUID of devices with `ls -la /dev/disk/by-id`
 - edit `/mnt/etc/default/grub` and add `cryptdevice=UUID=**device-UUID**:cryptlvm root=/dev/grp/root`
