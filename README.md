@@ -37,7 +37,7 @@ ___
 - `vgcreate grp /dev/mapper/cryptlvm`
 - `lvcreate -L 40G grp -n root`
 - `lvcreate -L 20G grp -n var`
-- `lvcreate -L 100%FREE grp -n home`
+- `lvcreate -l 100%FREE grp -n home`
 - `mount /dev/grp/root /mnt`
 - `mkdir /mnt/home`
 - `mount /dev/grp/home /mnt/home`
