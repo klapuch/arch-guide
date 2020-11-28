@@ -97,7 +97,7 @@ CONFIG_MICROCODE_INTEL=Y
 - check microcode -- `vim /boot/grub/grub.cfg` -- find `initrd	/boot/cpu_manufacturer-ucode.img /boot/initramfs-linux.img`
 
 #### Reboot
-- `mount -R /mnt`
+- `umount -R /mnt`
 - `reboot`
 
 #### Post-installation
