@@ -26,32 +26,50 @@ ___
 ___
 
 #### LVM on LUKS
-- run `cfdisk` and create two partitions - one for "system" and second for `/boot`
+- run `cfdisk /dev/nvmen01` and create two partitions - one for "system" and second for `/boot`
 - check disks with `lsblk`
-- `cryptsetup luksFormat /dev/sda1` -- for system partition
-- `cryptsetup -y -v luksFormat --type luks1 /dev/sda2` -- for `/boot` partition
-- `cryptsetup open /dev/sda1 cryptlvm`
-- `cryptsetup open /dev/sda2 cryptboot`
-- `mkfs.fat -F32 /dev/mapper/cryptboot`
+- `mkfs.fat -F32 /dev/nvmen01p1`
+- `cryptsetup luksFormat /dev/nvmen01p2` -- for system partition
+- `cryptsetup open /dev/nvmen01p2 cryptlvm`
 - `pvcreate /dev/mapper/cryptlvm`
 - `vgcreate grp /dev/mapper/cryptlvm`
 - `lvcreate -L 40G grp -n root`
 - `lvcreate -L 20G grp -n var`
 - `lvcreate -l 100%FREE grp -n home`
-- `mount /dev/grp/root /mnt`
-- `mkdir /mnt/home`
-- `mount /dev/grp/home /mnt/home`
-- `mkdir /mnt/var`
-- `mount /dev/grp/var /mnt/var`
-- `mount /dev/mapper/cryptboot /mnt/boot`
+- `mkfs.ext4 /dev/mapper/grp-home`
+- `mkfs.ext4 /dev/mapper/grp-var`
+- `mkfs.ext4 /dev/mapper/grp-root`
+- `mkdir /mnt/boot && mkdir /mnt/home && mkdir /mnt/var`
+- `mount /dev/mapper/grp-root /mnt`
+- `mount /dev/mapper/grp-home /mnt/home`
+- `mount /dev/mapper/grp-var /mnt/var`
+- `mount /dev/nvmen01p1 /mnt/boot`
 
 ##### Configuration
-- `pacstrap /mnt base linux-lts linux-firmware vim dhcp dhcpcd iwd net-tools base-devel lvm2 mkinitcpio grub efibootmgr intel-ucode`
+- `pacstrap /mnt base linux linux-firmware vim dhcpcd iwd net-tools base-devel lvm2 mkinitcpio intel-ucode`
 - edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)`
-- get UUID of devices with `ls -la /dev/disk/by-id`
-- edit `/mnt/etc/default/grub` and add `cryptdevice=UUID=**device-UUID**:cryptlvm root=/dev/grp/root`
 - `genfstab -U /mnt >> /mnt/etc/fstab`
 - ? consider to add `noatime` ?
+- get UUID of devices with `lsblkid /dev/nvme*`
+- install bootloader with `bootctl install`
+
+edit boot entry `/boot/loader/loader.conf`
+```
+default 	arch
+timeout 	4
+editor 		0
+```
+
+
+create/edit `/boot/loader/entries.arch.conf`
+```
+title 		Arch Linux
+linux 		/vmlinuz-linux
+inird 		/intel-ucode.img
+inird 		/initramfs-linux.img
+options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm=lockdown,yama,apparmor rw
+```
+- update bootloader with `bootctl update`
 
 
 ###### Chroot
@@ -81,30 +99,21 @@ arch-chroot /mnt
 ###### Root password
 - `passwd`
 
-###### GRUB 
-- `mkdir /boot/efi`
-- `grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi`
-
-Enable early microcode loading: `vim /etc/deafult/grub`
-```
-CONFIG_BLK_DEV_INITRD=Y
-CONFIG_MICROCODE=y
-CONFIG_MICROCODE_INTEL=Y
-# CONFIG_MICROCODE_AMD=y
-```
-
-- `grub-mkconfig -o /boot/grub/grub.cfg`
-- check microcode -- `vim /boot/grub/grub.cfg` -- find `initrd	/boot/cpu_manufacturer-ucode.img /boot/initramfs-linux.img`
-
 #### Reboot
 - `umount -R /mnt`
 - `reboot`
 
 #### Post-installation
 
+#### DHCP
+- enable DHCP `sudo systemctl enable dhcpcd`
+- start DHCP `sudo systemctl start dhcpcd`
+
 ##### User
 
 - `useradd -m -G wheel dom`
+- `passwd dom`
+- `EXPORT editor=vim`
 - `visudo` -- uncomment `%wheel`
 
 ##### AUR
@@ -167,6 +176,7 @@ dnssec
 
 - `sudo pacman -S nftables`
 - `sudo systemctl enable nftables`
+- `sudo systemctl start nftables`
 - list rules `sudo nft list ruleset`
 - `sudo vim /etc/nftables.conf` -- add `drop` to `forward` and `input`
 - `sudo systemctl restart nftables`
@@ -184,12 +194,12 @@ dnssec
 /swapfile none swap defaults 0 0
 ```
 
-##### Firejail
-- `sudo pacman -S firejail`
-- `ln -s /usr/bin/firejail /usr/bin/firefox`
-- see if running via firejail `firejail --list`
-
 ##### AppArmor
-- `sudo vim /etc/default/grub` -> `apparmor=1 lsm=lockdown,yama,apparmor` to `GRUB_CMDLINE_LINUX_DEFAULT`
 - check if enabled `aa-enabled`
 - check loaded status `aa-status`git
+
+##### Firejail
+- `sudo pacman -S firejail`
+- `sudo aa-enforce firejail-default`
+- `ln -s /usr/bin/firejail /usr/local/bin/firefox`
+- see if running via firejail `firejail --list`	
