@@ -196,7 +196,7 @@ dnssec
 
 ##### AppArmor
 - check if enabled `aa-enabled`
-- check loaded status `aa-status`git
+- check loaded status `aa-status`
 
 ##### Firejail
 - `sudo pacman -S firejail`
