@@ -203,5 +203,12 @@ dnssec
 - see if running via firejail `firejail --list`	
 
 ##### Packages
-- `sudo pacman -S vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `sudo pacman -S dnsutils vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
 - `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3`
+
+##### Network
+- add Google DNS to `/etc/resolv.conf` -- `nameserver 8.8.8.8`
+- `sudo chattr +i /etc/resolv.conf`
+- `sudo systemctl restart NetworkManager`
+- `sudo systemctl disable systemd-networkd`
+- `sudo pacman -R dhcpcd`
