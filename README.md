@@ -181,18 +181,13 @@ dnssec
 - `sudo vim /etc/nftables.conf` -- add `drop` to `forward` and `input`
 - `sudo systemctl restart nftables`
 - list new rules `sudo nft list ruleset`
-- `reboot` and check activation etc..
 
 ##### Swap config
 - `sudo dd if=/dev/zero of=/swapfile bs=1M count=6000 status=progress`
 - `sudo chmod 600 /swapfile`
 - `sudo mkswap /swapfile`
 - `sudo swapon /swapfile`
-
-`sudo vim /etc/fstab`
-```
-/swapfile none swap defaults 0 0
-```
+- `echo '/swapfile none swap defaults 0 0' >> /etc/fstab`
 
 ##### AppArmor
 - check if enabled `aa-enabled`
