@@ -49,7 +49,10 @@ ___
 - `pacstrap /mnt base linux linux-firmware vim dhcpcd iwd net-tools base-devel lvm2 mkinitcpio intel-ucode`
 - edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)`
 - `genfstab -U /mnt >> /mnt/etc/fstab`
-- add `noatime` to all except `/boot`
+- add `noatime` to all
+- add `nodev` to all except `/`
+- add `nosuid` to all except `/`
+- add `noexec` to `/boot`
 - get UUID of devices with `lsblkid /dev/nvme*`
 - install bootloader with `bootctl install`
 
