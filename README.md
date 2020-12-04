@@ -49,13 +49,13 @@ ___
 - `pacstrap /mnt base linux linux-firmware vim dhcpcd iwd net-tools base-devel lvm2 mkinitcpio intel-ucode`
 - edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)`
 - `genfstab -U /mnt >> /mnt/etc/fstab`
-- ? consider to add `noatime` ?
+- add `noatime` to all except `/boot`
 - get UUID of devices with `lsblkid /dev/nvme*`
 - install bootloader with `bootctl install`
 
 edit boot entry `/boot/loader/loader.conf`
 ```
-default 	arch
+default 	arch.conf
 timeout 	4
 editor 		0
 ```
@@ -184,7 +184,7 @@ dnssec
 - `reboot` and check activation etc..
 
 ##### Swap config
-- `sudo dd if=/dev/zero of=/swapfile bs=1M count=8000 status=progress`
+- `sudo dd if=/dev/zero of=/swapfile bs=1M count=6000 status=progress`
 - `sudo chmod 600 /swapfile`
 - `sudo mkswap /swapfile`
 - `sudo swapon /swapfile`
@@ -203,3 +203,7 @@ dnssec
 - `sudo aa-enforce firejail-default`
 - `ln -s /usr/bin/firejail /usr/local/bin/firefox`
 - see if running via firejail `firejail --list`	
+
+##### Packages
+- `sudo pacman -S vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3`
