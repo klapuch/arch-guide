@@ -212,3 +212,14 @@ dnssec
 - `sudo systemctl restart NetworkManager`
 - `sudo systemctl disable systemd-networkd`
 - `sudo pacman -R dhcpcd`
+
+##### Umask
+- `sudo vim /etc/profile`
+- `umask 0077`
+
+##### PAM
+- `sudo vim /etc/pam.d/passwd`
+- add `rounds=65536`
+- `sudo su`
+- `passwd`
+- `passwd dom`
