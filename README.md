@@ -141,39 +141,6 @@ arch-chroot /mnt
 
 Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 
-##### DNS
-
-###### dnsmasq
-- `sudo pacman -S dnsmasq`
-- `sudo systemctl enable dnsmasq`
-- check if running `journalctl -u dnsmasq.service`
-- `sudo vim /etc/dnsmasq.conf` -- `listen-address=::1,127.0.0.1`
-- `sudo vim /etc/dnsmasq.conf` -- `cache-size=1000`
-
-`sudo vim /etc/resolv.conf`
-```
-nameserver ::1
-nameserver 127.0.0.1
-options trust-ad
-```
-
-- `sudo chattr -i /etc/resolv.conf`
-
-`sudo vim /etc/dnsmasq.conf`
-```
-[...]
-no-resolv
-
-server=8.8.8.8
-```
-
-Enable DNSSEC
-
-`sudo vim /etc/resolv.conf`
-```
-conf-file=/usr/share/dnsmasq/trust-anchors.conf
-dnssec
-```
 
 ##### Firewall
 
