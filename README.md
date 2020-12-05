@@ -170,11 +170,65 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - see if running via firejail `firejail --list`	
 
 ##### Packages
-- `sudo pacman -S dnsutils vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `sudo pacman -S pulseaudio dnsutils vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
 - `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3`
 
+##### RNGD
+- `sudo pacman -S rng-tools`
+- `sudo systemctl enable rngd`
+- `sudo systemctl start rngd`
+
+##### Fonts
+- `sudo pacman -S ttf-dejavu ttf-liberation noto-fonts`
+```
+sudo ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+```
+
+- `vim /etc/profile.d/freetype2.sh` and uncomment last line
+
+
+`vim /etc/fonts/local.conf`
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+   <match>
+      <edit mode="prepend" name="family">
+         <string>Noto Sans</string>
+      </edit>
+   </match>
+   <match target="pattern">
+      <test qual="any" name="family">
+         <string>serif</string>
+      </test>
+      <edit name="family" mode="assign" binding="same">
+         <string>Noto Serif</string>
+      </edit>
+   </match>
+   <match target="pattern">
+      <test qual="any" name="family">
+         <string>sans-serif</string>
+      </test>
+      <edit name="family" mode="assign" binding="same">
+         <string>Noto Sans</string>
+      </edit>
+   </match>
+   <match target="pattern">
+      <test qual="any" name="family">
+         <string>monospace</string>
+      </test>
+      <edit name="family" mode="assign" binding="same">
+         <string>Noto Mono</string>
+      </edit>
+   </match>
+</fontconfig>
+```
+
 ##### Network
-- add Google DNS to `/etc/resolv.conf` -- `nameserver 8.8.8.8`
+- `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
+- `echo 'nameserver 8.8.8.8' >> /etc/resolv.conf`
 - `sudo chattr +i /etc/resolv.conf`
 - `sudo systemctl restart NetworkManager`
 - `sudo systemctl disable systemd-networkd`
@@ -190,3 +244,7 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - `sudo su`
 - `passwd`
 - `passwd dom`
+
+##### Sound
+- `pulseaudio --check`
+- `pulseaudio -D`
