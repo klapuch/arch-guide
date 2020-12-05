@@ -220,3 +220,6 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 - `sudo pacman -S pulseaudio`
 - `pulseaudio --check`
 - `pulseaudio -D`
+
+##### XFCE
+- add `xfce4-popup-whiskermenu` to keyboard-shortcuts
