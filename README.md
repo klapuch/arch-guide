@@ -19,6 +19,7 @@
 ___
 
 - `/` -> `40GB` -- includes swap file
+- `/data` -> `150GB`
 - `/boot` -> `512MB`
 - `/var` -> `20GB`
 - `/home` -> the rest
@@ -34,14 +35,17 @@ ___
 - `pvcreate /dev/mapper/cryptlvm`
 - `vgcreate grp /dev/mapper/cryptlvm`
 - `lvcreate -L 40G grp -n root`
+- `lvcreate -L 150G grp -n data`
 - `lvcreate -L 20G grp -n var`
 - `lvcreate -l 100%FREE grp -n home`
 - `mkfs.ext4 /dev/mapper/grp-home`
 - `mkfs.ext4 /dev/mapper/grp-var`
+- `mkfs.ext4 /dev/mapper/grp-data`
 - `mkfs.ext4 /dev/mapper/grp-root`
-- `mkdir /mnt/boot && mkdir /mnt/home && mkdir /mnt/var`
+- `mkdir /mnt/boot && mkdir /mnt/home && mkdir /mnt/var && mkdir /mnt/data`
 - `mount /dev/mapper/grp-root /mnt`
 - `mount /dev/mapper/grp-home /mnt/home`
+- `mount /dev/mapper/grp-data /mnt/data`
 - `mount /dev/mapper/grp-var /mnt/var`
 - `mount /dev/nvmen01p1 /mnt/boot`
 
@@ -54,7 +58,6 @@ ___
 - add `nosuid` to all except `/`
 - add `noexec` to `/boot`
 - get UUID of devices with `lsblkid /dev/nvme*`
-- install bootloader with `bootctl install`
 
 edit boot entry `/boot/loader/loader.conf`
 ```
@@ -72,7 +75,7 @@ inird 		/intel-ucode.img
 inird 		/initramfs-linux.img
 options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm=lockdown,yama,apparmor rw
 ```
-- update bootloader with `bootctl update`
+- update or install bootloader with `bootctl update` or `bootctl install`
 
 
 ###### Chroot
@@ -171,7 +174,7 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - see if running via firejail `firejail --list`	
 
 ##### Packages
-- `sudo pacman -S gnome-keyring dnsutils vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `sudo pacman -S strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
 - `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3`
 
 ##### RNGD
