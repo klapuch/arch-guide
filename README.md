@@ -57,7 +57,14 @@ ___
 - add `nodev` to all except `/`
 - add `nosuid` to all except `/`
 - add `noexec` to `/boot`
-- get UUID of devices with `lsblkid /dev/nvme*`
+
+###### Chroot
+
+```
+arch-chroot /mnt
+```
+
+###### Boot
 
 edit boot entry `/boot/loader/loader.conf`
 ```
@@ -66,8 +73,10 @@ timeout 	4
 editor 		0
 ```
 
+- `bootctl install`
+- get UUID of devices with `blkid /dev/nvme*`
 
-create/edit `/boot/loader/entries.arch.conf`
+create/edit `/boot/loader/entries/arch.conf`
 ```
 title 		Arch Linux
 linux 		/vmlinuz-linux
@@ -75,14 +84,7 @@ inird 		/intel-ucode.img
 inird 		/initramfs-linux.img
 options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm=lockdown,yama,apparmor rw
 ```
-- update or install bootloader with `bootctl update` or `bootctl install`
-
-
-###### Chroot
-
-```
-arch-chroot /mnt
-```
+- update `bootctl update`
 
 ###### Time zone
 - `ln -sf /usr/share/zoneinfo/Europe/Prague /etc/localtime`
@@ -119,7 +121,7 @@ arch-chroot /mnt
 
 - `useradd -m -G wheel dom`
 - `passwd dom`
-- `EXPORT editor=vim`
+- `export EDITOR=vim`
 - `visudo` -- uncomment `%wheel`
 
 ##### AUR
@@ -129,11 +131,11 @@ arch-chroot /mnt
 - `sudo chown -R dom:dom yay-git`
 - `cd yay-git`
 - `makepkg -si`
-- upgrade `sudo yay -Syu`
+- upgrade `yay -Syu`
 
 ##### Display manager
 - `yay -S ly`
-- `sudo systemctl enable ly.service`
+- `sudo systemctl enable ly`
 - `reboot`
 
 ##### Display server
@@ -156,12 +158,31 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - `sudo systemctl restart nftables`
 - list new rules `sudo nft list ruleset`
 
+##### Packages
+- `sudo pacman -S apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3 dropbox postman-bin`
+
+##### Network
+- `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
+- `echo 'nameserver 8.8.8.8' >> /etc/resolv.conf`
+- Remove unused nameservers
+- `sudo chattr +i /etc/resolv.conf`
+- `sudo systemctl disable systemd-networkd`
+- `sudo systemctl disable dhcpcd`
+- `sudo systemctl enable NetworkManager`
+- `sudo systemctl start NetworkManager`
+
 ##### Swap config
 - `sudo dd if=/dev/zero of=/swapfile bs=1M count=6000 status=progress`
 - `sudo chmod 600 /swapfile`
 - `sudo mkswap /swapfile`
 - `sudo swapon /swapfile`
 - `echo '/swapfile none swap defaults 0 0' >> /etc/fstab`
+
+##### RNGD
+- `sudo pacman -S rng-tools`
+- `sudo systemctl enable rngd`
+- `sudo systemctl start rngd`
 
 ##### AppArmor
 - check if enabled `aa-enabled`
@@ -170,17 +191,9 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 ##### Firejail
 - `sudo pacman -S firejail`
 - `sudo aa-enforce firejail-default`
-- `ln -s /usr/bin/firejail /usr/local/bin/firefox`
+- `ln -s /usr/bin/firejail /usr/bin/firefox`
 - see if running via firejail `firejail --list`	
 
-##### Packages
-- `sudo pacman -S strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
-- `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3`
-
-##### RNGD
-- `sudo pacman -S rng-tools`
-- `sudo systemctl enable rngd`
-- `sudo systemctl start rngd`
 
 ##### Fonts
 - `sudo pacman -S ttf-dejavu ttf-liberation noto-fonts`
@@ -229,15 +242,6 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
    </match>
 </fontconfig>
 ```
-
-##### Network
-- `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
-- `echo 'nameserver 8.8.8.8' >> /etc/resolv.conf`
-- Remove unused nameservers
-- `sudo chattr +i /etc/resolv.conf`
-- `sudo systemctl restart NetworkManager`
-- `sudo systemctl disable systemd-networkd`
-- `sudo pacman -R dhcpcd`
 
 ##### Umask
 - `sudo vim /etc/profile`
