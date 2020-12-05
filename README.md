@@ -149,6 +149,7 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - `sudo systemctl start nftables`
 - list rules `sudo nft list ruleset`
 - `sudo vim /etc/nftables.conf` -- add `drop` to `forward` and `input`
+- `sudo vim /etc/nftables.conf` -- remove the SSH allowed access
 - `sudo systemctl restart nftables`
 - list new rules `sudo nft list ruleset`
 
@@ -170,7 +171,7 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - see if running via firejail `firejail --list`	
 
 ##### Packages
-- `sudo pacman -S pulseaudio dnsutils vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `sudo pacman -S gnome-keyring dnsutils vlc curl wget git tig firefox chromium postman lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
 - `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3`
 
 ##### RNGD
@@ -229,6 +230,7 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 ##### Network
 - `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
 - `echo 'nameserver 8.8.8.8' >> /etc/resolv.conf`
+- Remove unused nameservers
 - `sudo chattr +i /etc/resolv.conf`
 - `sudo systemctl restart NetworkManager`
 - `sudo systemctl disable systemd-networkd`
@@ -246,5 +248,6 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 - `passwd dom`
 
 ##### Sound
+- `sudo pacman -S pulseaudio`
 - `pulseaudio --check`
 - `pulseaudio -D`
