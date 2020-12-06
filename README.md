@@ -159,9 +159,11 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `sudo pacman -S cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
 - `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin`
 - `sudo usermod -aG docker $(whoami)`
+- `sudo systemctl enable cronie`
+- `sudo systemctl start cronie`
 
 ##### Network
 - `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
