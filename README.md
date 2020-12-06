@@ -161,6 +161,7 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 ##### Packages
 - `sudo pacman -S pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
 - `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin`
+- `sudo usermod -aG docker $(whoami)`
 
 ##### Network
 - `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
@@ -223,3 +224,7 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 
 ##### XFCE
 - add `xfce4-popup-whiskermenu` to keyboard-shortcuts
+
+##### Utils
+- `sudo systemctl enable fstrim.timer`
+- `sudo systemctl start fstrim.timer`
