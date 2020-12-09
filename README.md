@@ -42,11 +42,14 @@ ___
 - `mkfs.ext4 /dev/mapper/grp-var`
 - `mkfs.ext4 /dev/mapper/grp-data`
 - `mkfs.ext4 /dev/mapper/grp-root`
-- `mkdir /mnt/boot && mkdir /mnt/home && mkdir /mnt/var && mkdir /mnt/data`
 - `mount /dev/mapper/grp-root /mnt`
+- `mkdir /mnt/home`
 - `mount /dev/mapper/grp-home /mnt/home`
+- `mkdir /mnt/data`
 - `mount /dev/mapper/grp-data /mnt/data`
+- `mkdir /mnt/var`
 - `mount /dev/mapper/grp-var /mnt/var`
+- `mkdir /mnt/boot`
 - `mount /dev/nvmen01p1 /mnt/boot`
 
 ##### Configuration
