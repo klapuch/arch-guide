@@ -189,6 +189,7 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - `sudo pacman -S rng-tools`
 - `sudo systemctl enable rngd`
 - `sudo systemctl start rngd`
+- check `cat /proc/sys/kernel/random/entropy_avail`
 
 ##### AppArmor
 - check if enabled `aa-enabled`
