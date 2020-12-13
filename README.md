@@ -162,11 +162,14 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `sudo pacman -S pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
 - `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable cronie`
 - `sudo systemctl start cronie`
+- `sudo systemctl enable paccache.timer`
+- `sudo systemctl start paccache.timer`
+- `sudo vim /etc/pacman.conf` -- uncomment `VerbosePkgLists`
 
 ##### Network
 - `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
@@ -222,6 +225,7 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 - `sudo su`
 - `passwd`
 - `passwd dom`
+- `sudo vim /etc/security/faillock.conf` -- set `deny` to `20`
 
 ##### Sound
 - `sudo pacman -S pulseaudio`
