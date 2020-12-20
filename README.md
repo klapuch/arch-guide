@@ -162,7 +162,7 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch`
+- `sudo pacman -S extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch yubikey-manager qbittorrent`
 - `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable cronie`
@@ -197,6 +197,8 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 ##### AppArmor
 - check if enabled `aa-enabled`
 - check loaded status `aa-status`
+- `sudo systemctl enable apparmor`
+- `sudo systemctl start apparmor`
 
 ##### Firejail
 - `sudo pacman -S firejail`
