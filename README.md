@@ -219,7 +219,7 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 
 ##### Umask
 - `sudo vim /etc/profile`
-- `umask 0077`
+- `umask 022`
 
 ##### PAM
 - `sudo vim /etc/pam.d/passwd`
