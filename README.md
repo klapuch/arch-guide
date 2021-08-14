@@ -162,14 +162,15 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch yubikey-manager qbittorrent unrar baobab youtube-dl recode parallel zip rsync redis intellij-idea-community-edition`
-- `yay -S phpstorm phpstorm-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin pspg ncspot`
+- `sudo pacman -S extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch yubikey-manager qbittorrent unrar baobab youtube-dl recode parallel zip rsync redis`
+- `yay -S heroku intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin pspg ncspot`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable cronie`
 - `sudo systemctl start cronie`
 - `sudo systemctl enable paccache.timer`
 - `sudo systemctl start paccache.timer`
 - `sudo vim /etc/pacman.conf` -- uncomment `VerbosePkgLists`
+- `heroku plugins:install heroku-builds`
 
 ##### Network
 - `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
