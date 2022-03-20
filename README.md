@@ -44,19 +44,20 @@ ___
 - `mkfs.ext4 /dev/mapper/grp-root`
 - `mount /dev/mapper/grp-root /mnt`
 - `mkdir /mnt/home`
-- `mount /dev/mapper/grp-home /mnt/home`
 - `mkdir /mnt/data`
-- `mount /dev/mapper/grp-data /mnt/data`
 - `mkdir /mnt/var`
-- `mount /dev/mapper/grp-var /mnt/var`
 - `mkdir /mnt/boot`
+- `mount /dev/mapper/grp-home /mnt/home`
+- `mount /dev/mapper/grp-data /mnt/data`
+- `mount /dev/mapper/grp-var /mnt/var`
 - `mount /dev/nvmen01p1 /mnt/boot`
 
 ##### Configuration
-- `pacstrap /mnt base linux linux-firmware vim dhcpcd iwd net-tools base-devel lvm2 mkinitcpio intel-ucode`
+- `pacstrap /mnt base linux linux-firmware vim iwd net-tools base-devel lvm2 mkinitcpio intel-ucode`
 - edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)`
+- optionally edit `/mnt/etc/mkinitcpio.conf` and it's `MODULES` to include `MODULES=(nvme)`
 - `genfstab -U /mnt >> /mnt/etc/fstab`
-- add `noatime` to all
+- change `relatime` to `noatime` to all
 - add `nodev` to all except `/`
 - add `nosuid` to all except `/` and `/data`
 - add `noexec` to `/boot`
@@ -77,14 +78,14 @@ editor 		0
 ```
 
 - `bootctl install`
-- get UUID of devices with `blkid /dev/nvme*`
+- get UUID of devices with `blkid /dev/nvme*` for LUKS partition
 
 create/edit `/boot/loader/entries/arch.conf`
 ```
 title 		Arch Linux
 linux 		/vmlinuz-linux
-inird 		/intel-ucode.img
-inird 		/initramfs-linux.img
+initrd 		/intel-ucode.img
+initrd 		/initramfs-linux.img
 options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm=lockdown,yama,apparmor rw
 ```
 - update `bootctl update`
@@ -116,9 +117,10 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 
 #### Post-installation
 
-#### DHCP
-- enable DHCP `sudo systemctl enable dhcpcd`
-- start DHCP `sudo systemctl start dhcpcd`
+##### Network
+- `echo 'nameserver 1.1.1.1' > /etc/resolv.conf`
+- `echo 'nameserver 8.8.8.8' >> /etc/resolv.conf`
+- `chattr +i /etc/resolv.conf`
 
 ##### User
 
@@ -162,7 +164,7 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch yubikey-manager qbittorrent unrar baobab youtube-dl recode parallel zip rsync redis cups cups-pdf usbutils signal-desktop`
+- `sudo pacman -S extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch yubikey-manager qbittorrent unrar baobab youtube-dl recode parallel zip rsync redis usbutils signal-desktop`
 - `yay -S heroku intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin pspg ncspot tor-browser`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable cronie`
@@ -173,10 +175,6 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - `heroku plugins:install heroku-builds`
 
 ##### Network
-- `echo 'nameserver 1.1.1.1' >> /etc/resolv.conf`
-- `echo 'nameserver 8.8.8.8' >> /etc/resolv.conf`
-- Remove unused nameservers
-- `sudo chattr +i /etc/resolv.conf`
 - `sudo systemctl disable systemd-networkd`
 - `sudo systemctl disable dhcpcd`
 - `sudo systemctl enable NetworkManager`
