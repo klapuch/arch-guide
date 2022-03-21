@@ -14,7 +14,7 @@
 
 #### Layout
 - Disk size: `512GB`
-- RAM size: `16GB`
+- RAM size: `16GB` or `32GB`
 
 ___
 
@@ -27,7 +27,7 @@ ___
 ___
 
 #### LVM on LUKS
-- run `cfdisk /dev/nvmen01` and create two partitions - one for "system" and second for `/boot`
+- run `cfdisk /dev/nvmen01` and create two partitions - one for `/boot` as `EFI` and second for "system"
 - check disks with `lsblk`
 - `mkfs.fat -F32 /dev/nvmen01p1`
 - `cryptsetup luksFormat /dev/nvmen01p2` -- for system partition
@@ -78,7 +78,7 @@ editor 		0
 ```
 
 - `bootctl install`
-- get UUID of devices with `blkid /dev/nvme*` for LUKS partition
+- get UUID of devices with `blkid /dev/nvme*` for `LUKS` partition
 
 create/edit `/boot/loader/entries/arch.conf`
 ```
@@ -152,7 +152,7 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - `sudo systemctl enable nftables`
 - `sudo systemctl start nftables`
 - list rules `sudo nft list ruleset`
-- `sudo vim /etc/nftables.conf` -- add `drop` to `forward` and `input`
+- `sudo vim /etc/nftables.conf` -- add `drop` to `forward`
 - `sudo vim /etc/nftables.conf` -- remove the SSH allowed access
 - `sudo systemctl restart nftables`
 - list new rules `sudo nft list ruleset`
