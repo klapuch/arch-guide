@@ -140,18 +140,10 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - `makepkg -si`
 - upgrade `yay -Syu`
 
-##### Display manager
-- `yay -S ly`
-- `sudo systemctl enable ly`
-- `reboot`
-
 ##### Display server
-- `sudo pacman -S xorg xorg-server xfce4 xfce4-goodies`
-- `vim /etc/X11/xinit/xinitrc` -- append `exec startxfce4`
-- `vim /etc/X11/Xwrapper.config` -- `needs_root_rights = no`
-- `reboot`
-
-Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
+- `sudo pacman -S gnome`
+- `sudo systemctl enable gdm`
+- `sudo systemctl start gdm`
 
 
 ##### Firewall
@@ -166,8 +158,8 @@ Check is running Xorg rootless: `ps -o user $(pgrep Xorg)`
 - list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq gnome-keyring dnsutils vlc curl wget git tig firefox chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager networkmanager-openvpn network-manager-applet gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake gnome-disk-utility neofetch yubikey-manager qbittorrent unrar baobab youtube-dl recode parallel zip rsync redis usbutils signal-desktop`
-- `yay -S heroku intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin pspg ncspot tor-browser`
+- `sudo pacman -S extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake neofetch yubikey-manager qbittorrent unrar baobab youtube-dl recode parallel zip rsync redis usbutils signal-desktop`
+- `yay -S heroku intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin pspg tor-browser`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable cronie`
 - `sudo systemctl start cronie`
@@ -216,8 +208,6 @@ sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
 sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 ```
 
-- `vim /etc/profile.d/freetype2.sh` and uncomment last line
-
 ##### Umask
 - `sudo vim /etc/profile`
 - `umask 022`
@@ -229,14 +219,6 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 - `passwd`
 - `passwd dom`
 - `sudo vim /etc/security/faillock.conf` -- set `deny` to `20`
-
-##### Sound
-- `sudo pacman -S pulseaudio`
-- `pulseaudio --check`
-- `pulseaudio -D`
-
-##### XFCE
-- add `xfce4-popup-whiskermenu` to keyboard-shortcuts
 
 ##### Utils
 - `sudo systemctl enable fstrim.timer`
