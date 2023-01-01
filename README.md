@@ -53,7 +53,9 @@ ___
 - `mount /dev/nvmen01p1 /mnt/boot`
 
 ##### Configuration
-- `pacstrap /mnt base linux linux-firmware vim iwd net-tools base-devel lvm2 mkinitcpio intel-ucode`
+- `pacman -Syu archlinux-keyring`
+- `pacstrap /mnt archlinux-keyring dhcpcd base linux linux-firmware vim iwd net-tools base-devel lvm2 mkinitcpio`
+- for Intel append `intel-ucode` or `amd-ucode`
 - edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)`
 - optionally edit `/mnt/etc/mkinitcpio.conf` and it's `MODULES` to include `MODULES=(nvme)`
 - `genfstab -U /mnt >> /mnt/etc/fstab`
@@ -67,7 +69,7 @@ ___
 ```
 arch-chroot /mnt
 ```
-
+git@github.com:klapuch/arch-guide.git
 ###### Boot
 
 edit boot entry `/boot/loader/loader.conf`
@@ -84,7 +86,7 @@ create/edit `/boot/loader/entries/arch.conf`
 ```
 title 		Arch Linux
 linux 		/vmlinuz-linux
-initrd 		/intel-ucode.img
+initrd 		/intel-ucode.img  # or amd-ucode.img
 initrd 		/initramfs-linux.img
 options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm=lockdown,yama,apparmor rw
 ```
@@ -130,6 +132,7 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - `passwd dom`
 - `export EDITOR=vim`
 - `visudo` -- uncomment `%wheel`
+- reboot and log in as `dom`
 
 ##### AUR
 - `sudo pacman -S git`
@@ -152,21 +155,20 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - `sudo systemctl enable nftables`
 - `sudo systemctl start nftables`
 - list rules `sudo nft list ruleset`
-- `sudo vim /etc/nftables.conf` -- add `drop` to `forward`
+- `sudo vim /etc/nftables.conf` -- add `drop` to `forward` instead of any content inside `{}`
 - `sudo vim /etc/nftables.conf` -- remove the SSH allowed access
 - `sudo systemctl restart nftables`
 - list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S bluez bluez-utils extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake neofetch yubikey-manager qbittorrent unrar baobab youtube-dl recode parallel zip rsync redis usbutils signal-desktop`
-- `yay -S heroku intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-3 dropbox postman-bin hub brave-bin pspg tor-browser`
+- `sudo pacman -S archlinux-keyring bluez bluez-utils extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake neofetch yubikey-manager qbittorrent unrar baobab recode parallel zip rsync redis usbutils gnome-tweak-tools`
+- `yay -S intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-4 dropbox postman-bin hub brave-bin pspg tor-browser`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable cronie`
 - `sudo systemctl start cronie`
 - `sudo systemctl enable paccache.timer`
 - `sudo systemctl start paccache.timer`
 - `sudo vim /etc/pacman.conf` -- uncomment `VerbosePkgLists`
-- `heroku plugins:install heroku-builds`
 
 ##### Network
 - `sudo systemctl disable systemd-networkd`
@@ -179,7 +181,7 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - `sudo chmod 600 /swapfile`
 - `sudo mkswap /swapfile`
 - `sudo swapon /swapfile`
-- `echo '/swapfile none swap defaults 0 0' >> /etc/fstab`
+- `echo '/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab`
 
 ##### RNGD
 - `sudo pacman -S rng-tools`
@@ -192,12 +194,6 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - check loaded status `aa-status`
 - `sudo systemctl enable apparmor`
 - `sudo systemctl start apparmor`
-
-##### Firejail
-- `sudo pacman -S firejail`
-- `sudo aa-enforce firejail-default`
-- `ln -s /usr/bin/firejail /usr/local/bin/firefox`
-- see if running via firejail `firejail --list`	
 
 
 ##### Fonts
