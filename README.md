@@ -170,6 +170,10 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - `sudo systemctl start paccache.timer`
 - `sudo vim /etc/pacman.conf` -- uncomment `VerbosePkgLists`
 
+##### Docker
+Set directory to store docker files to `/data/docker`:
+- `sudo mkdir /data/docker && echo '{"data-root": "/data/docker"}' | sudo tee /etc/docker/daemon.json`
+
 ##### Network
 - `sudo systemctl disable systemd-networkd`
 - `sudo systemctl disable dhcpcd`
