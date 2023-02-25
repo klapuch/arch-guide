@@ -161,8 +161,8 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S archlinux-keyring bluez bluez-utils extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake neofetch yubikey-manager qbittorrent unrar baobab recode parallel zip rsync redis usbutils gnome-tweak-tools lxc postgresql`
-- `yay -S intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-4 dropbox postman-bin hub brave-bin pspg tor-browser`
+- `sudo pacman -S archlinux-keyring bluez bluez-utils extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake neofetch yubikey-manager qbittorrent unrar baobab recode parallel zip rsync redis usbutils gnome-tweak-tools lxc postgresql nfs-utils`
+- `yay -S intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-4 dropbox postman-bin hub brave-bin pspg tor-browser downgrade`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable cronie`
 - `sudo systemctl start cronie`
