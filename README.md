@@ -162,13 +162,17 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 
 ##### Packages
 - `sudo pacman -S archlinux-keyring bluez bluez-utils extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake neofetch yubikey-manager qbittorrent unrar baobab recode parallel zip rsync redis usbutils gnome-tweak-tools lxc postgresql nfs-utils`
-- `yay -S intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-4 dropbox postman-bin hub brave-bin pspg tor-browser downgrade`
+- `yay -S intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-4 dropbox postman-bin hub brave-bin pspg tor-browser downgrade minq-ananicy-git`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable cronie`
 - `sudo systemctl start cronie`
 - `sudo systemctl enable paccache.timer`
 - `sudo systemctl start paccache.timer`
 - `sudo vim /etc/pacman.conf` -- uncomment `VerbosePkgLists`
+
+##### Ananicy
+- `sudo systemctl enable ananicy.service`
+- `sudo systemctl start ananicy.service`
 
 ##### Docker
 Set directory to store docker files to `/data/docker`:
@@ -186,12 +190,6 @@ Set directory to store docker files to `/data/docker`:
 - `sudo mkswap /swapfile`
 - `sudo swapon /swapfile`
 - `echo '/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab`
-
-##### RNGD
-- `sudo pacman -S rng-tools`
-- `sudo systemctl enable rngd`
-- `sudo systemctl start rngd`
-- check `cat /proc/sys/kernel/random/entropy_avail`
 
 ##### AppArmor
 - check if enabled `aa-enabled`
