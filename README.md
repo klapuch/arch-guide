@@ -35,8 +35,8 @@ ___
 - `pvcreate /dev/mapper/cryptlvm`
 - `vgcreate grp /dev/mapper/cryptlvm`
 - `lvcreate -L 40G grp -n root`
-- `lvcreate -L 150G grp -n data`
-- `lvcreate -L 20G grp -n var`
+- `lvcreate -L 200G grp -n data`
+- `lvcreate -L 30G grp -n var`
 - `lvcreate -l 100%FREE grp -n home`
 - `mkfs.ext4 /dev/mapper/grp-home`
 - `mkfs.ext4 /dev/mapper/grp-var`
@@ -69,7 +69,7 @@ ___
 ```
 arch-chroot /mnt
 ```
-git@github.com:klapuch/arch-guide.git
+
 ###### Boot
 
 edit boot entry `/boot/loader/loader.conf`
@@ -88,7 +88,7 @@ title 		Arch Linux
 linux 		/vmlinuz-linux
 initrd 		/intel-ucode.img  # or amd-ucode.img
 initrd 		/initramfs-linux.img
-options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm=lockdown,yama,apparmor rw
+options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm=landlock,lockdown,yama,integrity,apparmor,bpf rw
 ```
 - update `bootctl update`
 
@@ -164,8 +164,7 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root apparmor=1 lsm
 - `sudo pacman -S archlinux-keyring bluez bluez-utils extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc detox htop redshift thunderbird keepass filezilla networkmanager gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake neofetch yubikey-manager qbittorrent unrar baobab recode parallel zip rsync redis usbutils gnome-tweak-tools lxc postgresql nfs-utils`
 - `yay -S intellij-idea-ultimate-edition intellij-idea-ultimate-edition-jre docker docker-compose sublime-text-4 dropbox postman-bin hub brave-bin pspg tor-browser downgrade minq-ananicy-git`
 - `sudo usermod -aG docker $(whoami)`
-- `sudo systemctl enable cronie`
-- `sudo systemctl start cronie`
+- `sudo systemctl disable cronie`
 - `sudo systemctl enable paccache.timer`
 - `sudo systemctl start paccache.timer`
 - `sudo vim /etc/pacman.conf` -- uncomment `VerbosePkgLists`
