@@ -35,8 +35,8 @@ ___
 - `pvcreate /dev/mapper/cryptlvm`
 - `vgcreate grp /dev/mapper/cryptlvm`
 - `lvcreate -L 40G grp -n root`
-- `lvcreate -L 200G grp -n data`
-- `lvcreate -L 30G grp -n var`
+- `lvcreate -L 300G grp -n data`
+- `lvcreate -L 40G grp -n var`
 - `lvcreate -l 100%FREE grp -n home`
 - `mkfs.ext4 /dev/mapper/grp-home`
 - `mkfs.ext4 /dev/mapper/grp-var`
