@@ -19,9 +19,9 @@
 ___
 
 - `/` -> `40GB` -- includes swap file
-- `/data` -> `200GB`
+- `/data` -> `300GB`
 - `/boot` -> `512MB`
-- `/var` -> `30GB`
+- `/var` -> `40GB`
 - `/home` -> the rest
 
 ___
