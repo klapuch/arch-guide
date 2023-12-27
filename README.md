@@ -42,18 +42,17 @@ ___
 - `mkfs.ext4 /dev/mapper/grp-var`
 - `mkfs.ext4 /dev/mapper/grp-data`
 - `mkfs.ext4 /dev/mapper/grp-root`
-- `mount /dev/mapper/grp-root /mnt`
 - `mkdir /mnt/home`
 - `mkdir /mnt/data`
 - `mkdir /mnt/var`
 - `mkdir /mnt/boot`
+- `mount /dev/mapper/grp-root /mnt`
 - `mount /dev/mapper/grp-home /mnt/home`
 - `mount /dev/mapper/grp-data /mnt/data`
 - `mount /dev/mapper/grp-var /mnt/var`
 - `mount /dev/nvmen01p1 /mnt/boot`
 
 ##### Configuration
-- `pacman -Syu archlinux-keyring`
 - `pacstrap /mnt archlinux-keyring dhcpcd base linux linux-firmware vim iwd net-tools base-devel lvm2 mkinitcpio`
 - for Intel append `intel-ucode` or `amd-ucode`
 - edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)`
