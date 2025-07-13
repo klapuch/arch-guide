@@ -12,56 +12,36 @@
 
 ### Partition
 
-#### Layout
-- Disk size: `512GB`
-- RAM size: `16GB` or `32GB`
-
-___
-
-- `/` -> `40GB` -- includes swap file
-- `/data` -> `300GB`
-- `/boot` -> `512MB`
-- `/var` -> `40GB`
-- `/home` -> the rest
-
-___
-
-#### LVM on LUKS
+#### BTRFS on LUKS
 - run `cfdisk /dev/nvmen01` and create two partitions - one for `/boot` as `EFI` and second for "system"
 - check disks with `lsblk`
 - `mkfs.fat -F32 /dev/nvmen01p1`
 - `cryptsetup luksFormat /dev/nvmen01p2` -- for system partition
-- `cryptsetup open /dev/nvmen01p2 cryptlvm`
-- `pvcreate /dev/mapper/cryptlvm`
-- `vgcreate grp /dev/mapper/cryptlvm`
-- `lvcreate -L 40G grp -n root`
-- `lvcreate -L 300G grp -n data`
-- `lvcreate -L 40G grp -n var`
-- `lvcreate -l 100%FREE grp -n home`
-- `mkfs.ext4 /dev/mapper/grp-home`
-- `mkfs.ext4 /dev/mapper/grp-var`
-- `mkfs.ext4 /dev/mapper/grp-data`
-- `mkfs.ext4 /dev/mapper/grp-root`
-- `mkdir /mnt/home`
-- `mkdir /mnt/data`
-- `mkdir /mnt/var`
-- `mkdir /mnt/boot`
-- `mount /dev/mapper/grp-root /mnt`
-- `mount /dev/mapper/grp-home /mnt/home`
-- `mount /dev/mapper/grp-data /mnt/data`
-- `mount /dev/mapper/grp-var /mnt/var`
+- `cryptsetup open /dev/nvmen01p2 cryptroot`
+- `mkfs.btrfs /dev/mapper/cryptroot`
+- `mount /dev/mapper/cryptroot /mnt`
+- `btrfs subvolume create /mnt/@`
+- `btrfs subvolume create /mnt/@home`
+- `btrfs subvolume create /mnt/@log`
+- `btrfs subvolume create /mnt/@cache`
+- `btrfs subvolume create /mnt/@archive`
+- `btrfs subvolume create /mnt/@data`
+- `umount /mnt`
+- `mount -o noatime,compress=zstd,subvol=@ /dev/mapper/cryptroot /mnt`
+- `mkdir -p /mnt/{boot,home,var/log,var/cache,archive,data}`
+- `mount -o noatime,nosuid,nodev,compress=zstd,subvol=@home /dev/mapper/cryptroot /mnt/home`
+- `mount -o noatime,nosuid,nodev,compress=zstd,subvol=@cache /dev/mapper/cryptroot /mnt/var/cache`
+- `mount -o noatime,nosuid,nodev,compress=zstd:5,subvol=@log /dev/mapper/cryptroot /mnt/var/log`
+- `mount -o noatime,nosuid,nodev,noexec,compress=zstd:8,subvol=@archive /dev/mapper/cryptroot /mnt/archive`
+- `mount -o noatime,nodev,noexec,compress=zstd,subvol=@data /dev/mapper/cryptroot /mnt/data`
 - `mount /dev/nvmen01p1 /mnt/boot`
 
 ##### Configuration
-- `pacstrap /mnt archlinux-keyring dhcpcd base linux linux-firmware vim iwd net-tools base-devel lvm2 mkinitcpio`
+- `pacstrap /mnt archlinux-keyring dhcpcd base linux linux-firmware vim iwd net-tools base-devel mkinitcpio btrfs-progs nvidia`
 - for Intel append `intel-ucode` or `amd-ucode`
-- edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)`
-- optionally edit `/mnt/etc/mkinitcpio.conf` and it's `MODULES` to include `MODULES=(nvme)`
+- edit `/mnt/etc/mkinitcpio.conf` and it's `HOOKS` to include `HOOKS=(... block encrypt filesystems fsck)`
+- optionally edit `/mnt/etc/mkinitcpio.conf` and it's `MODULES` to include `MODULES=(nvme nvidia)`
 - `genfstab -U /mnt >> /mnt/etc/fstab`
-- change `relatime` to `noatime` to all
-- add `nodev` to all except `/`
-- add `nosuid` to all except `/` and `/data`
-- add `noexec` to `/boot`
 
 ###### Chroot
 
@@ -87,7 +67,7 @@ title 		Arch Linux
 linux 		/vmlinuz-linux
 initrd 		/intel-ucode.img  # or amd-ucode.img
 initrd 		/initramfs-linux.img
-options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root lsm=landlock,lockdown,yama,integrity,apparmor,bpf rw
+options 	cryptdevice=UUID=YOUR_UUID:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ lsm=landlock,lockdown,yama,integrity,apparmor,bpf rw
 ```
 - update `bootctl update`
 
@@ -143,9 +123,9 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root lsm=landlock,l
 - upgrade `yay -Syu`
 
 ##### Display server
-- `sudo pacman -S gnome`
-- `sudo systemctl enable gdm`
-- `sudo systemctl start gdm`
+- `sudo pacman -S hyprland sddm`
+- `sudo systemctl enable hyprland`
+- `sudo systemctl enable sddm`
 
 
 ##### Firewall
@@ -153,41 +133,18 @@ options 	cryptdevice=UUID=YOUR_UUID:grp root=/dev/mapper/grp-root lsm=landlock,l
 - `sudo pacman -S nftables`
 - `sudo systemctl enable nftables`
 - `sudo systemctl start nftables`
-- list rules `sudo nft list ruleset`
-- `sudo vim /etc/nftables.conf` -- add `drop` to `forward` instead of any content inside `{}`
-- `sudo vim /etc/nftables.conf` -- add `drop` to `ssh` access
-- `sudo systemctl restart nftables`
-- list new rules `sudo nft list ruleset`
 
 ##### Packages
-- `sudo pacman -S archlinux-keyring bluez bluez-utils extra/imagemagick unzip pacman-contrib perl-image-exiftool perl-rename ntfs-3g tree mc bash-completion cronie php ruby pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc detox htop thunderbird keepass filezilla networkmanager gnupg pcsclite ccid hopenpgp-tools yubikey-personalization openssh tmux guake neofetch yubikey-manager qbittorrent unrar baobab recode parallel zip rsync redis usbutils lxc postgresql nfs-utils openvpn networkmanager-openvpn`
-- `yay -S intellij-idea-ultimate-edition docker docker-compose sublime-text-4 dropbox postman-bin hub-bin pspg tor-browser downgrade minq-ananicy-git gnome-tweaks`
+- `sudo pacman -S archlinux-keyring less nautilus tree mc php pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc htop thunderbird keepassxc gnupg openssh tmux kitty redis lxc postgresql`
+- `yay -S intellij-idea-ultimate-edition docker docker-compose sublime-text-4 dropbox postman-bin hub-bin pspg downgrade`
 - `sudo usermod -aG docker $(whoami)`
-- `sudo systemctl disable cronie`
 - `sudo systemctl enable paccache.timer`
 - `sudo systemctl start paccache.timer`
 - `sudo vim /etc/pacman.conf` -- uncomment `VerbosePkgLists`
 
-##### Ananicy
-- `sudo systemctl enable ananicy.service`
-- `sudo systemctl start ananicy.service`
-
 ##### Docker
 Set directory to store docker files to `/data/docker`:
 - `sudo mkdir /data/docker && echo '{"data-root": "/data/docker"}' | sudo tee /etc/docker/daemon.json`
-
-##### Network
-- `sudo systemctl disable systemd-networkd`
-- `sudo systemctl disable dhcpcd`
-- `sudo systemctl enable NetworkManager`
-- `sudo systemctl start NetworkManager`
-
-##### Swap config
-- `sudo dd if=/dev/zero of=/swapfile bs=1M count=6000 status=progress`
-- `sudo chmod 600 /swapfile`
-- `sudo mkswap /swapfile`
-- `sudo swapon /swapfile`
-- `echo '/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab`
 
 ##### AppArmor
 - check if enabled `aa-enabled`
@@ -204,13 +161,7 @@ sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
 sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 ```
 
-##### Umask
-- `sudo vim /etc/profile`
-- `umask 022`
-
 ##### PAM
-- `sudo vim /etc/pam.d/passwd`
-- add `rounds=65536`
 - `sudo su`
 - `passwd`
 - `passwd dom`
