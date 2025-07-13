@@ -186,3 +186,6 @@ sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 ##### Utils
 - `sudo systemctl enable fstrim.timer`
 - `sudo systemctl start fstrim.timer`
+
+##### Troubleshooting
+- https://www.reddit.com/r/hyprland/comments/1kup9o4/comment/mu3kg8a/
