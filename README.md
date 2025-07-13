@@ -133,6 +133,8 @@ options 	cryptdevice=UUID=YOUR_UUID:cryptroot root=/dev/mapper/cryptroot rootfla
 - `sudo pacman -S nftables`
 - `sudo systemctl enable nftables`
 - `sudo systemctl start nftables`
+- `sudo vim /etc/nftables.conf` -- add `drop` to `forward` instead of any content inside `{}`
+- `sudo systemctl restart nftables`
 
 ##### Packages
 - `sudo pacman -S archlinux-keyring less nautilus tree mc php pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc htop thunderbird keepassxc gnupg openssh tmux kitty redis lxc postgresql`
@@ -145,6 +147,14 @@ options 	cryptdevice=UUID=YOUR_UUID:cryptroot root=/dev/mapper/cryptroot rootfla
 ##### Docker
 Set directory to store docker files to `/data/docker`:
 - `sudo mkdir /data/docker && echo '{"data-root": "/data/docker"}' | sudo tee /etc/docker/daemon.json`
+
+
+##### Network
+
+- `sudo systemctl disable systemd-networkd`
+- `sudo systemctl disable dhcpcd`
+- `sudo systemctl enable NetworkManager`
+- `sudo systemctl start NetworkManager`
 
 ##### AppArmor
 - check if enabled `aa-enabled`
