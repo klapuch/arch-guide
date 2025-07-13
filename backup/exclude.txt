@@ -1,7 +1,0 @@
-/home/dom/backup/arch-full*
-/tmp/*
-/var/cache/pacman/pkg
-/home/dom/.cache
-/home/dom/Projects/shop
-/home/dom/Projects/Kavala
-/home/dom/Dropbox

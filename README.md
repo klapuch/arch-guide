@@ -136,6 +136,12 @@ options 	cryptdevice=UUID=YOUR_UUID:cryptroot root=/dev/mapper/cryptroot rootfla
 - `sudo vim /etc/nftables.conf` -- add `drop` to `forward` instead of any content inside `{}`
 - `sudo systemctl restart nftables`
 
+##### Swap
+- `btrfs subvolume create /swap`
+- `btrfs filesystem mkswapfile --size 4g --uuid clear /swap/swapfile`
+- `swapon /swap/swapfile`
+- `echo '/swap/swapfile none swap defaults 0 0' >> /etc/fstav`
+
 ##### Packages
 - `sudo pacman -S archlinux-keyring hypridle hyprshot hyprlock libnotify mako less nautilus tree mc php pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc htop thunderbird keepassxc gnupg openssh tmux kitty redis lxc postgresql`
 - `yay -S intellij-idea-ultimate-edition docker docker-compose sublime-text-4 dropbox postman-bin hub-bin pspg downgrade`
