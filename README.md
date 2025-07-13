@@ -137,7 +137,7 @@ options 	cryptdevice=UUID=YOUR_UUID:cryptroot root=/dev/mapper/cryptroot rootfla
 - `sudo systemctl restart nftables`
 
 ##### Packages
-- `sudo pacman -S archlinux-keyring less nautilus tree mc php pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc htop thunderbird keepassxc gnupg openssh tmux kitty redis lxc postgresql`
+- `sudo pacman -S archlinux-keyring hypridle hyprshot hyprlock libnotify mako less nautilus tree mc php pavucontrol apparmor strace dnsmasq dnsutils vlc curl wget git tig firefox firefox-developer-edition chromium lxc htop thunderbird keepassxc gnupg openssh tmux kitty redis lxc postgresql`
 - `yay -S intellij-idea-ultimate-edition docker docker-compose sublime-text-4 dropbox postman-bin hub-bin pspg downgrade`
 - `sudo usermod -aG docker $(whoami)`
 - `sudo systemctl enable paccache.timer`
